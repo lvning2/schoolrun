@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface CompMapper {
-    //改变
+    //改变111111
     int countByExample(CompExample example);
 
     int deleteByExample(CompExample example);
