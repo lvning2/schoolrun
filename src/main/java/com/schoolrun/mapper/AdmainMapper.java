@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 
 public interface AdmainMapper {
 
+
     int countByExample(AdmainExample example);
 
     int deleteByExample(AdmainExample example);
