@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>登录</title>
+		<script src="static/jquery-1.11.0.min.js"></script>
+		
+		<style>
+	 
+	
+			.outer-wrap{
+    		 background-color: #ddd;
+   			 position: absolute;
+		    top:0px;
+		    left: 0px;
+		    width: 100%;
+		    height: 100%;
+		    background-image: url(static/img/huaban.jpg);
+			background-size: 100% 100%;
+			background-attachment: fixed;
+        }
+			.di{
+				border: 1px solid cadetblue;
+				border-radius: 10px;
+				font-family: "楷体";
+				width: 370px;	
+				
+    			position: relative;
+			    left: 50%;
+			    top: 50%;
+			    margin-top: -150px;
+			    margin-left: -200px;
+            	
+			}
+			.bt{
+				padding: 20px;
+				text-align: center;
+				font-size: 25px;
+				color: brown;
+			}
+			input{
+				border-radius: 5px;
+				height: 20px;
+				font-family: "楷体"
+			}
+			
+			select{
+				border-radius: 5px;
+				height: 20px;
+				font-family: "楷体";
+			}
+		 	tr td{
+				width: 200px;
+				height: 40px;
+				padding: 0px;								
+			}
+			tr td:first-child{
+				
+				text-align: right;
+				padding-right: 20px;
+			}
+			table tr:last-child td:last-child{
+				padding-left: 100px;
+			}
+		
+			.in{
+				width: 200px;
+			}
+			
+			
+		</style>
+		
+	</head>
+	<!--
+		登录界面，后端返回到页面时
+		提交时当验证通过时，需要在
+			服务器设置session，以备未来取用
+					这里使用的是url+id+name形式的跳转，没有使用cookie,
+						后面可以针对代码优化考虑
+		
+		我这里是使用了el表达式进行错误信息的填充，
+				后面可以考虑使用respnse中的回调时，用jq判断，使用弹窗
+		然后是表单提交{
+			action="{pageContext.request.contextPath}/login"
+			data{
+				uid,upwd,utype,
+			}
+			后端处理：如果是用户就进入用户表查询，如果是管理员就进入管理表查询
+			  	成功，进入相应的主页，
+			  错误返回信息error
+			  		使用了el表达式，要对信息内容进行中文转码
+			  	
+		}	
+		对了，登录时，要在服务器进行session添加，有就修改，好后面用
+				id,name
+		点击注册时，会进行a标签跳转到
+				<a href="sign.html">
+					
+	-->
+	<body>
+		<div class="outer-wrap">
+		<div  class="di">
+			<form action="/login" method="post" >
+				
+				<div class="bt">
+					<img src="../lib/layui/images/face/14.gif" />
+					校园跑腿登录系统
+					<img src="../lib/layui/images/face/37.gif" />
+				</div>
+				<table  >
+					<tr>
+						<td>账号：</td>
+						<td>
+							<input type="text" name="uname" class="in"  placeholder="请输入账号(提示:学号或工号)" />
+						</td>
+					</tr>
+					<tr>
+						<td>密码：</td>
+						<td>
+							<input type="password" name="upwd" class="in" placeholder="请输入密码" />
+						</td>
+					</tr>
+					<tr>
+						<td>角色：</td>
+						<td>
+							<select name="utype">
+								<option value="1" selected="selected">普通用户</option>
+								<option value="2">跑腿用户</option>
+								<option value="3">管理员</option>
+								
+							</select>
+							
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="submit" value="登录" />
+						</td>
+						<td>
+						<a href="/sign.html">
+							<input type="button" id="button1" value="注册" />	
+						</a>	
+						</td>
+					</tr>
+						
+				</table>
+							
+			</form>
+		</div>
+		</div>
+	</body>
+	<script>
+		//对登录的错误信息弹窗显示		
+		var error="[[${error}]]";
+		console.log(error)
+		if(error=="false"){
+			alert("[[${msg}]]");
+		}
+		
+	</script>
+</html>

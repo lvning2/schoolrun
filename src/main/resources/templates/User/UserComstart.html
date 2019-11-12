@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<title>用户投诉</title>
+		<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>	
+		<link rel="stylesheet" href="../css/schoolrun.css"/>
+	</head>
+	<!--
+		这是投诉页面，从任务主体，点击投诉按钮而来，
+		这是进行任务的投诉，需要接收，tid,uid，pid,作为数据填充
+			点击投诉之后将form表单上传，需要在后台，添加一个投诉项
+					即，需要增加此时的投诉时间为投诉日期，投诉状态改为处理中，
+						投诉人联系方式，被投诉人联系方式，就行填充，
+							还需要将该任务的异常状态改为投诉中
+		表单提交{
+			action="${pageContext.request.contextPath}/usercomstart"
+			data{
+				uid,tid,pid,ctype,cmain
+			}
+		}			
+	
+		
+	-->
+	<body>
+		<div>
+		<form action="${pageContext.request.contextPath}/usercomstart" method="post">
+			<table>
+				<tr>
+					<td>投诉人：</td>
+					<td><input  type="text" name="uid"  value="${uid}" readonly="readonly"/>  </td>
+				</tr>
+				<tr>
+					<td>投诉任务编号：</td>
+					<td><input  type="text" name="tid"  value="${tid}" readonly="readonly"/>  </td>
+				</tr>
+				<!-- 被投诉人 -->
+				<tr>
+					<td>被投诉人：</td>
+					<td><input  type="text" name="pid" value="${pid}" readonly="readonly"/>  </td>
+				</tr>
+				<tr>
+						<td>投诉类别：</td>
+						<td>
+							<select name="ctype">
+								<option value="1">速度慢</option>
+								<option value="2">态度恶劣</option>
+								<option value="3">货品问题</option>
+								<option value="4">其他</option>
+							</select>
+						</td>
+				</tr>
+				<tr>
+					<td>投诉原因：</td>
+					<td>
+						<textarea name="cmain"></textarea>
+					</td>
+				</tr>
+			
+				
+			
+				<!-- 按钮 -->
+				<tr>
+					
+					<td><input  type="submit"  value="提交" />  </td>
+					
+					<td>
+						<a href="javascript:history.go(-1);location.reload()">
+							<input type="button" value="返回" />
+						</a>
+					</td>
+				</tr>
+			</table>			
+		</form>
+	</div>		
+</body>
+</html>

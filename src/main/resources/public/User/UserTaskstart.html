@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<title>用户发布任务</title>
+		<script type="text/javascript" src="../static/jquery-1.11.0.min.js"></script>
+		<link rel="stylesheet" href="../static/schoolrun.css" />
+		<!--	
+			这是用户发布任务页面,提交表单时{
+				action="${pageContext.request.contextPath}/usertaskstart"
+				data{
+					utel,tadress,trecom,tmain,tdemand
+				}
+				提交后端时，需要加入现在时间为任务发起时间tstart
+					初始化任务状态为未受理，tstate
+					异常状态设为无
+					从session得出utel,将其填入
+			}
+			
+			
+		-->
+	</head>
+	<body>
+		<div>
+		<form action="/usertaskstart" method="post">
+			<table >				
+				<!-- 发起人联系方式 -->
+				<tr>
+					<td>发起人联系方式：</td> 
+					<td>	
+						<input type="text" name="utel"  id="utel" /> 
+						
+					</td>
+					<td>
+						<span id="span1"></span>
+					</td>
+					
+				</tr>
+				<tr>
+					<td>确认联系方式：</td> 
+					<td>	
+						<input type="text" id="utel2"/> 
+					</td>
+					<td>
+						<span id="span2"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>任务地点：</td>
+					<td >
+						
+						<input type="text" name="tadress" id="tadress" style="width: 250px;"  /> 
+					</td>
+					<td>
+						<span id="span3"></span>
+					</td>
+				</tr>
+				<!-- 任务简介 -->
+				<tr>
+					<td>任务简介：</td>
+					<td >
+					
+						<input type="text" name="trecom" id="trecom"  style="width: 250px;"  />
+					</td>
+					<td>
+						<span id="span4"></span>
+					</td>
+				</tr>
+				<!-- 任务详情 -->
+				
+				<tr>
+					<td>任务酬劳：</td>
+					<td>
+						<input type="text"  name="tgift" id="tgift"  style="width: 250px;"/>
+					</td>
+					<td>
+						<span id="span6"></span>
+					</td>
+				</tr>
+				
+				<!-- 完成要求 -->
+				<tr>
+					<td>完成要求：</td>
+					<td>  
+						<textarea name="tdemand" id="tdemand"></textarea>
+					</td>
+					<td>
+						<span id="span7"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>任务详情：</td>
+					<td>
+						<textarea name="tmain" id="tmain" ></textarea>
+					</td>
+					<td>
+						<span id="span5"></span>
+					</td>
+				</tr>
+				<!-- 按钮 -->
+				<tr>
+					<td><input type="submit" value="提交" /></td>
+					<td>
+						<a href="javascript:history.go(-1);location.reload()">
+							<input type="button" value="取消" />
+						</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>	
+	</body>
+	<script>
+		//发起任务时的验证
+		$("#tmain").hover(function(){
+			console.log("+++++++++++++++++dsfds");
+			//utel,tadress,trecom,tmain,tdemand
+			var  utel=$("#utel").val().trim().replace(/\s/g,"");
+			var  utel2=$("#utel2").val().trim().replace(/\s/g,"");
+			if(utel==null||utel==""){				
+				$("#span1").text("哥们，你电话没填？");				
+			}
+			else if(utel.length!=11){				
+				$("#span1").text("哥们，你确定你的手机号不是11位？");
+			}else if(utel!=utel2){
+				$("#span1").text("");
+				$("#span2").text("上帝呀，两次手机号不一致呀，虽然你很有money,但是是让你确定呀。OK？ ");
+			}else{
+				$("#span2").text("");
+			}
+			
+			var  tadress=$("#tadress").val().trim().replace(/\s/g,"");
+			if(tadress==null||tadress==""){				
+				$("#span3").text("嘿，你地址没有填？要用卫星追踪吗？");				
+			}else{
+				$("#span3").text("");		
+			}
+			
+			var trecom=$("#trecom").val().trim().replace(/\s/g,"");
+			if(trecom==null||trecom==""){				
+				$("#span4").text("简介还是写一下吧，没有标题的任务可不受欢迎呦");				
+			}else{
+				$("#span4").text("");		
+			}
+		
+			var tgift=$("#tgift").val().trim().replace(/\s/g,"");
+			if(tgift==null||tgift==""||tgift=="无"){				
+				$("#span6").text("任没有酬劳吗？那可不受人欢迎呢");	
+				$("#tgift").val("无");
+			}else{
+				$("#span6").text("");		
+			}
+			var tdemand=$("#tdemand").val().trim().replace(/\s/g,"");
+			if(tdemand==null||tdemand==""){								
+					$("#tdemand").val("无");
+			}else{
+				$("#span7").text("");		
+			}
+		},function(){
+			var tmain=$("#tmain").val().trim().replace(/\s/g,"");
+			if(tmain==null||tmain==""){				
+				$("#span5").text("任务内容没写呢？难道是随便？那也要写个随便吧");				
+			}else{
+				$("#span5").text("");		
+			}
+			
+		
+		})
+	</script>
+</html>

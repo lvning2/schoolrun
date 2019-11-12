@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>跑腿主体</title>
+  <link rel="stylesheet" href="../static/layui/css/layui.css">
+  <script src="../static/layui/layui.js"></script>
+  <script src="../static/jquery-1.11.0.min.js"></script>
+</head>
+<!--
+	这是跑腿用户主页面
+	登录主体页面
+		在登入跑腿该主页时，需要将uname返回，使用了el表达式
+										进行uname的数据填充
+	要求登录时，需要将用户ID，昵称加入session中
+			
+	如下，点击左侧面板的四个分面板，会
+	会通过jq，在内容主体iframe,上展示相应页面
+	
+-->
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">从此你将踏上成功之路</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+     
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">     	
+      	<span style="font-family: '楷体'; font-size: 18px;" >欢迎你，伟大的跑腿
+      			 <span  style="font-family: '楷体'; font-size: 20px;color: #009F95;" id="uname" th:text="${user.uname}">${uname}</span>
+      	</span>
+      </li>
+
+      <li class="layui-nav-item" ><a href="/" id="logoutx">退了</a></li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed"><a href="ErrandTasknewest.html" >最新订单</a> </li>
+        <li class="layui-nav-item"><a href="/Errand/ErrandTasklist.html">查看任务</a> </li>
+        <li class="layui-nav-item"><a href="/Errand/ErrandTaskMylist.html">我的订单</a> </li>
+		<li class="layui-nav-item"><a href="/Errand/ErrandMessangelist.html">信息箱</a></li>
+
+      </ul>
+  </div>
+  </div>
+
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+   <iframe id="ifa" frameborder="0" height="100%" width="100%" src="Errand/welcome.html"> </iframe>
+  </div>
+
+<!--  <div class="layui-footer">-->
+<!--    &lt;!&ndash; 底部固定区域 &ndash;&gt;-->
+<!--		-->
+<!--  </div>-->
+
+</div>
+
+<script>
+
+//JavaScript代码区域
+	layui.use('element', function(){
+  var element = layui.element;
+  
+});
+ $(document).ready(function(){
+
+//iframe页面跳转
+   console.log($("#ifa").attr("src"));
+   alert($("#ifa").attr("src"));
+   //$("#uname").text(uname);
+
+   $("li>a").click(function (e) {
+         e.preventDefault();
+         $("#ifa").attr("src",$(this).attr("href"));
+        });
+   })
+
+  $("#logoutx").click(function () {
+      window.location.href="/";
+  })
+
+</script>
+</body>
+</html>

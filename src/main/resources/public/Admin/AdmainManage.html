@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>管理员管理</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="../static/layui/css/layui.css">
+  <script src="../static/layui/layui.js"></script>
+  <script src="../static/jquery-1.11.0.min.js"></script>
+</head>
+<!--
+	这是管理员的管理员管理界面
+	设置了只能增加和删除，不能修改
+	通过layui的动态数据表格进行动态数据填充
+	页面加载，数据填充：{
+		url:'${pageContext.request.contextPath}/admainmanage'
+		data:是属于layui的数据格式{
+				具体需要：aid,aname,atel
+				}
+		}				
+	点击删除，弹出按钮，点击确定，发出ajax异步请求，{
+				url:"${pageContext.request.contextPath}/admainmanagedel",
+				data:	"aid":aid   注:json格式，接收后删除该ID管理员
+		}
+	点击增加，该iframe页面会转向管理员增加页面，
+				即：AdmainManageAdd.html
+				{
+					后期可以对其进行优化，使其在弹窗进行管理员增加
+						但需注意，增加的同时要进行数据刷新，让增加的管理员显示在列表
+				}
+		
+-->
+<body>
+ 
+<table class="layui-hide" id="test" lay-filter="test"></table>
+ 
+<script type="text/html" id="toolbarDemo">
+  <div class="layui-btn-container">
+  <a href="AdmainManageAdd.html"> 
+  	<button class="layui-btn layui-btn-sm" lay-event="admainadd">增加管理员</button>
+  </a>
+  </div>
+</script>
+ 
+<script type="text/html" id="barDemo">
+ 
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+              
+          
+
+ 
+<script>
+layui.use('table', function(){
+ 	var table = layui.table;
+  	
+  table.render({//数据填充
+    elem: '#test'
+    ,url:'/admin/admainmanage'
+    ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+    ,title: '管理员管理'
+    ,cols: [[
+		{field:'uid ', title:'管理员ID', width:'30%', fixed: 'left', unresize: true, sort: true}
+      ,{field:'aname', title:'管理员昵称', width:'20%'}
+        ,{field:'atel', title:'管理员联系方式', width:'30%'}
+      ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:'20%'}
+    ]]
+    ,page: true
+  });
+  
+ /* //头工具栏事件
+  table.on('toolbar(test)', function(obj){
+  	//当点击时，触发管理员增加  
+  	//增加弹出窗事件
+  		$.ajax({
+  			type:"post",
+  			url:"${pageContext.request.contextPath}/admainmanageadd",
+  			async:true
+  		});
+  	
+    });
+*/
+  //监听行工具事件
+ 	 table.on('row(test)', function(obj){
+  	//这是点击了删除按钮
+    var data = obj.data;
+    var aid=data.aid;
+    //console.log(obj)
+   
+      layer.confirm('真的删除这个管理员吗，再考虑一下', function(index){
+        obj.del();
+        layer.close(index);
+        //需要ajax异步操作，将管理表中的这个人删除
+     		$.ajax({
+     			type:"post",
+     			url:"${pageContext.request.contextPath}/admainmanagedel",
+     			async:true,   			
+     			data:{
+     				"aid":data.aid
+     			},
+     			success:function(){
+     				alert("删除成功");
+     			}
+     		});
+      
+      });
+   
+ 	 });
+});
+</script>
+
+</body>
+</html>

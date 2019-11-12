@@ -1,0 +1,15 @@
+
+server:
+  port: 8080
+
+spring:
+  datasource:
+    username: eomsbf
+    password: F05_Ses_Sion
+    url: jdbc:oracle:thin:@10.217.1.41:1521:noradb
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+
+#mybatis:
+#  config-location: classpath:mybatis/mybatis-cfg.xml
+#  mapper-locations: classpath:mybatis/mapper/*.xml
+

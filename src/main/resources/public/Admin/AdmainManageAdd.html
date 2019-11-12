@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>管理员增加</title>
+		 <link rel="stylesheet" href="../css/schoolrun.css">
+	 	<script type="text/javascript" src="../static/jquery-1.11.0.min.js" ></script>
+	</head>
+	<!--
+	该页面是由管理员列表页面跳转而来，进行管理员增加操作,通过表单提交给后端，
+				进行管理员增加后
+				，重定向到管理员列表页面
+		action="${pageContext.request.contextPath}/admainmanageadd"
+		data:{
+			aid,aname,apwd,atel
+		}			
+	-->
+	<body>
+		<div>
+			<form action="/admin/admainmanageadd" method="post">
+				<table>
+					<tr>
+						<td>管理员ID</td>
+						<td>
+							<input type="text" name="aid" id="aid"/>
+							
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							
+							<span id="span1"></span>
+						</td>
+					</tr>
+					<tr>
+						<td>管理员昵称</td>
+						<td>
+							<input type="text" name="aname" />
+						</td>
+					</tr>
+					<tr>
+						<td>管理员密码</td>
+						<td>
+							<input type="password" name="apwd" id="apwd1" />
+						
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							
+							<span id="span2"></span>
+						</td>
+					</tr>
+					<tr>
+						<td>确认密码</td>
+						<td>
+							<input type="password" id="apwd2" />
+							
+						</td>
+					</tr>
+						<td></td>
+						<td>
+							
+							<span id="span3"></span>
+						</td>
+					</tr>
+					<tr>
+						<td>管理员联系方式</td>
+						<td>
+							<input type="text" name="atel" id="atel" />
+							
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>						
+							<span id="span4"></span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="submit" id="autton" value="提交" />
+						</td>
+						<td id="bfh">
+						<a href="javascript:history.go(-1);location.reload()">
+							<input type="button" value="返回" />
+						</a>
+					</td
+					</tr>
+				</table>
+			</form>
+		</div>
+	</body>
+	<script>
+		
+			
+		
+		$("#atel").hover(function(){
+			
+			var aid=$("#aid").val().trim().replace(/\s/g,"");//去空并取值
+			if(aid==null||aid==""){
+				$("#span1").text("管理员也要有ID呀！");
+			}else{
+				$("#span1").text("");
+			}
+			
+			var apwd1=$("#apwd1").val().trim().replace(/\s/g,"");
+			var apwd2=$("#apwd2").val().trim().replace(/\s/g,"");
+			if(apwd1==null||apwd1==""){
+				$("#span2").text("管理员也要有密码呀");
+			}else if(apwd2!=apwd1){
+				$("#span2").text("");
+				$("#span3").text("你确定？两次密码不一致，在确定确定把");
+			}else{
+				$("#span2").text("");
+				$("#span3").text("");
+			}
+			
+		},
+		function(){
+			var atel=$("#atel").val().trim().replace(/\s/g,"");
+			if(atel==null||atel==""){
+				$("#span4").text("没有联系方式，难道用卫星？");
+				}else{
+					$("#span4").text("");
+				}
+		}
+	)
+		
+	</script>
+</html>

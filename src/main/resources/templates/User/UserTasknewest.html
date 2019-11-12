@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<title>用户最新任务</title>
+		<script type="text/javascript" src="../static/jquery-1.11.0.min.js"></script>
+		  <link rel="stylesheet" href="../static/schoolrun.css"  media="all">
+		          
+			
+	</head>
+	<!--
+		这是用户最新任务页面，需要进行ajax的数据填充，与任务主体差不多，不过填充淑君不一样
+		页面加载时
+		{
+			data{
+				tid,tstart,pid,ptel,tadress,trecom,tmain,tdemand,tcompalin,tstate,tend,tgift
+			}
+		}
+		书哟啊进行任务状态的判断，如果未受理，可以进行取消操作
+						如果任务进行中，可以选择投诉
+						如果是完成，可以进行投诉，和评价
+		点击投诉，进行表单提交时，将tid,与pid提交{
+			action="${pageContext.request.contextPath}/usertaskmaincomstart"
+			data{
+				tid。pid
+			}
+			在后端转向投诉页面，UserComstart.html
+		}
+		//点击提交按钮，配合编辑完成，主要是对编辑后的内容进行提交修改
+		$("#bjtj").click(function(){
+			//获取修改后的内容，并将其提交
+			$.ajax({
+				type:"post",
+				url:"${pageContext.request.contextPath}/usertaskupdata",				
+				data:{
+					"tid":tid
+					,"utel":$("#utel").val()
+					,"tadress":$("#tadress").val()
+					,"trecom":$("#trecom").val()
+					,"tdemand":$("#tdemand").val()
+					,"tmain":$("#tmain").val()
+					,"tgift":$("#tgift").val()
+					返回时，返回空即可，表明成功
+		//点击完成按钮，要求将任务编号tid,以及评价teva.提交
+		$("#tj").click(function(){
+			//获取修改后的内容，并将其提交
+			$.ajax({
+				type:"post",
+				url:"${pageContext.request.contextPath}/usertaskteva",				
+				data:{
+					"tid":tid
+					,"teva":$("#teva").val()					
+				},
+				success:function(){
+					//这是表示任务交付成功
+					//把任务状态修改
+					$("#tstate").val("已完成");
+					alert("任务已成功交付");
+		//点击任务取消按钮，  这是进行任务取消后端，需要提交任务编号，以及将任务状态改为已取消
+		$("#qx").click(function(){
+			$.ajax({
+				type:"post",
+				url:"${pageContext.request.contextPath}/usertaskdis",				
+				data:{
+					"tid":tid
+				},
+				
+	-->
+
+	<body>
+<div>
+		<form action="/usertaskmaincomstart"  method="post">
+			<table>
+				<!-- 任务编号 -->
+				<tr>
+					<td>任务编号：</td>
+					<td colspan="2">
+						<input  type="text"  name="tid" id="tid" th:value="${tid}"  readonly="readonly"/>
+					</td>
+				</tr>
+				<!-- 发起时间 -->
+				<tr>
+					<td>发起时间：</td>
+					<td colspan="2">
+						<input  type="text"   id="tstart"  th:value="${tstart}"  readonly="readonly"/>
+					</td>
+				</tr>
+					<tr>
+					<td>发布人：</td>
+					<td colspan="2">
+						<input  type="text"   id="uid"  th:value="${uid}"  readonly="readonly"/>
+					</td>
+				</tr>
+				<tr>
+					<td>发布人联系方式：</td>
+					<td colspan="2">
+						<input  type="text"   id="utel"  th:value="${utel}"  readonly="readonly"/>
+					</td>
+				</tr>
+				<!-- 接收跑腿 -->
+				<tr id="pid1">
+					<td>跑腿：</td>
+					<td colspan="2">
+						<input  type="text"  id="pid" name="pid" th:value="${pid}"   readonly="readonly"/>
+					</td>
+				</tr>
+				<tr id="ptel1">
+					<td>跑腿联系方式：</td>
+					<td colspan="2">
+						<input  type="text"  id="ptel"    readonly="readonly"/>
+					</td>
+				</tr>
+
+				<tr>
+					<td>任务地点：</td>
+					<td colspan="2">
+						<input  type="text"  id="tadress"   th:value="${tadress}"    readonly="readonly"/>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>任务简介：</td>
+					<td colspan="2">
+						<input  type="text"  id="trecom"   th:value="${trecom}"    readonly="readonly"/>
+					</td>
+				</tr>
+				<tr>
+					<td>任务酬劳：</td>
+					<td>
+						<input type="text"  id="tgift" th:value="${tgift}" readonly="readonly"  style="width: 250px;"/>
+					</td>
+				</tr>
+				<!-- 任务详情 -->
+				<tr>
+					<td>任务详情：</td>
+					<td colspan="2">
+					<textarea id="tmain"  readonly="readonly"></textarea>
+					</td>
+				</tr>			
+				<!-- 完成要求 -->
+				<tr>
+					<td>完成要求：</td>
+					<td colspan="2">					
+				<textarea id="tdemand"    readonly="readonly"  ></textarea>
+					</td>
+				</tr>
+				<!-- 评价 -->
+				<tr id="teva1">
+					<td>评价：</td>
+					<td colspan="2">
+						<select id="teva" name="teva">
+							
+							<option value="6">完美</option>
+							<option value="5">良好</option>
+							<option value="4">好</option>
+							<option value="3">一般</option>
+							<option value="2">差</option>
+							<option value="1">恶劣</option>
+						</select>
+					</td>
+				</tr>
+			 <tr >
+					<td>异常状态：</td>
+					<td colspan="2">
+						<input type="text" id="tcompalin" readonly="readonly" >
+				</td>
+				</tr>
+				<tr>
+					<td>任务状态：</td>
+					<td colspan="2">
+						<input type="text" id="tstate" readonly="readonly">
+					</td>
+				</tr>
+				<tr id="tend1">
+					<td>完成时间：</td>
+					<td >
+						<input type="text"  id="tend" name="tend"  th:value="${tend}"   readonly="readonly" />
+					</td>
+				</tr>
+				
+				<tr>			
+					<td >
+						<span id="bts">
+							<input  type="submit" id="ts"  value="投诉" /> 
+						</span>
+						<span id="bqx">
+							<input type="button" id="qx" style="width: 80px;" value="任务取消"  />
+						</span>
+					</td>
+					<td >
+						<span id="btj">
+							<input type="button" id="tj" value="完成"  />
+						</span>
+						<span id="bbjtj">
+							<input type="button" id="bjtj" style="width: 80px;" value="提交"  />
+						</span>
+						<span id="bbj">
+							<input type="button" id="bj" style="width: 80px;" value="编辑"  />
+						</span>
+						
+					</td>
+					<td> 
+						<a href="javascript:history.go(-1);location.reload()" >
+							<input type="button" value="返回"    />
+						</a>
+					</td>
+   			   </tr>
+			</table>			
+		</form>
+	</div>		
+	</body>
+	<script>
+		$(function(){
+			$.ajax({
+				type:"post",
+				url:"/usertasknewest",
+				dataType:"json",
+				success:function(data){  <!--获取到最新的任务数据-->
+					console.log(data);
+					//填充数据
+					//tid,tstart,pid,ptel,tadress,trecom,tmain,tdemand,tcompalin,tstate,tend
+					$("#tid").val(data.tid);
+					$("#tstart").val(data.tstart);
+					$("#utel").val(data.utel);
+					$("#uid").val(data.uid);
+					$("#pid").val(data.pid);
+					$("#ptel").val(data.ptel);
+					$("#tadress").val(data.tadress);
+					// $("#tstate").val(data.tstate);
+					$("#trecom").val(data.trecom);
+					$("#tmain").val(data.tmain);
+					$("#tcompalin").val(data.tcompalin);
+					$("#tdemand").val(data.tdemand);
+					$("#tgift").val(data.tgift);
+					$("#tend").val(data.tend);
+					var tstate=data.tstate;
+				if(tstate==0){ //该状态，此时页面主要是为了查看，和可以修改内容
+					$("#pid1").hide();
+					$("#ptel1").hide();
+					$("#teva1").hide();
+					$("#tend1").hide();
+					$("#bts").hide();
+					$("#btj").hide();
+					$("#tstate").val("未受理");
+				}else if(tstate==1){//该状态，此时页面主要是为了查看
+					$("#pid1").hide();
+					$("#ptel1").hide();
+					$("#teva1").hide();
+					$("#bts").hide();
+					$("#bqx").hide();
+					$("#btj").hide();
+					$("#bbj").hide();
+					$("#bbjtj").hide();
+					$("#tstate").val("已取消");
+				}else if(tstate==2){//该状态，此时页面主要是为了查看,且无法编辑
+					$("#bbjtj").hide();
+					$("#tend1").hide();
+					$("#bqx").hide();
+					$("#btj").hide();
+					$("#bbj").hide();
+					$("#tstate").val("任务进行中");
+				}else if(tstate==3){//该状态，此时页面主要是为了确认交付，即完成，可以进行评价，以及投诉
+					$("#bbjtj").hide();
+					$("#bqx").hide();
+					$("#bbj").hide();
+					$("#tstate").val("交付");
+				}else if(tstate==4){//该状态，此时页面主要是为了查看，可以进行评价，以及投诉
+					$("option[value='"+$(teva)+"']").prop("selected",true);//返回评价
+					$("#bbjtj").hide();
+					$("#bqx").hide();
+					$("#bbj").hide();
+					$("#tstate").val("已完成");
+				}else if(tstate==5){//该状态，此时页面主要是为了查看记录
+					$("#bbjtj").hide();
+					$("#bqx").hide();
+					$("#bbj").hide();
+					$("#bqx").hide();
+					$("#bbj").hide();
+					$("#btj").hide();
+					$("#tstate").val("结束");
+					$("option[value='"+$(teva)+"']").prop("selected",true);//返回评价
+				}			
+			}	
+		})
+	})
+	//点击编辑按钮，要求将只读取消掉
+		$("#bj").click(function(){
+			$("#utel").attr("readonly",false);
+			$("#tadress").attr("readonly",false);
+			$("#trecom").attr("readonly",false);
+			$("#tmain").attr("readonly",false);
+			$("#tdemand").attr("readonly",false);
+			$("#tgift").attr("readonly",false);
+		})
+		//配合编辑完成，主要是对编辑后的内容进行提交修改
+		$("#bjtj").click(function(){
+			//获取修改后的内容，并将其提交
+			$.ajax({
+				type:"post",
+				url:"/usertaskupdata",
+				data:{
+					"tid":tid
+					,"utel":$("#utel").val()
+					,"tadress":$("#tadress").val()
+					,"trecom":$("#trecom").val()
+					,"tdemand":$("#tdemand").val()
+					,"tmain":$("#tmain").val()
+					,"tgift":$("#tgift").val()
+					
+				},
+				success:function(){
+					//这是表示取消任务成功了
+					//将该页面刷新
+					/*
+					 该方法强迫浏览器刷新当前页面。
+					语法：location.reload([bForceGet])
+					 * */				
+					alert("编辑完成");
+				}
+			});
+			
+		})
+		//点击完成按钮，要求将任务编号tid,以及评价teva.提交
+		$("#tj").click(function(){
+			//获取修改后的内容，并将其提交
+			$.ajax({
+				type:"post",
+				url:"/usertaskteva",
+				data:{
+					"tid":tid
+					,"teva":$("#teva").val()					
+				},
+				success:function(){
+					//这是表示任务交付成功
+					//把任务状态修改
+					$("#tstate").val("已完成");
+					alert("任务已成功交付");
+				}
+			});
+			
+		})
+		//点击任务取消按钮，  这是进行任务取消后端，需要提交任务编号，以及将任务状态改为已取消
+		$("#qx").click(function(){
+			$.ajax({
+				type:"post",
+				url:"/usertaskdis",
+				data:{
+					"tid":tid
+				},
+				success:function(){
+					//这是表示取消任务成功了
+					//将该页面刷新
+					/*
+					 该方法强迫浏览器刷新当前页面。
+					语法：location.reload([bForceGet])
+					 * */
+					
+					//需要对任务状态进行修改
+					$("#tstate").val("已取消");
+					alert("任务已取消");
+				}
+			});
+		})
+	</script>
+</html>
+
+
+
+

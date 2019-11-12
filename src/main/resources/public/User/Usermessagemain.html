@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>投诉信息内容</title>
+		<script type="text/javascript" src="../static/jquery-1.11.0.min.js" ></script>
+		<link rel="stylesheet" href="../static/schoolrun.css"/>
+		<script src="../static/resove.js"></script>
+	</head>
+		<!--
+			这是投诉信息主体
+			由后端而来，需要进行el表达式，数据填充{
+				data{
+					cid,tid,cstart,pid,ctype,cmain,cstate,aid,cresult,cuint,cpint,cfinsh
+				}
+				主要时进行投诉状态的查看，与撤销
+			}
+			当点击撤销按钮时，将投诉编号cid,投诉任务编号tid提交，
+				需要在后台将该投诉状态改为已处理，
+				并将该任务的异常状态进行判定，如果该任务没有投诉处于处理中，
+					就可以将其设置为投诉关闭状态，否则设为投诉中状态
+		-->
+	<body>
+		<div>
+			<form action="/usermessagemainchange">
+				
+				<table>
+					<tr>
+						<td>投诉编号</td>
+						<td>
+							<input type="text" name="cid" id="cid"  readonly="readonly" />
+						</td>
+					</tr>
+					<tr>
+						<td>投诉任务编号</td>
+						<td>
+							<input type="text" name="tid" id="tid"  readonly="readonly" />
+						</td>
+					</tr>
+
+					<tr>
+						<td>投诉日期</td>
+						<td>
+							<input type="text"  id="cstart" readonly="readonly" />
+						</td>
+					</tr>
+					<tr>
+						<td>被投诉人：</td>
+						<td>
+							<input type="text"  id="pid"  readonly="readonly" />
+						</td>
+					</tr>
+					<tr>
+						<td>投诉类别</td>
+						<td>
+							<input type="text" id="ctype"  readonly="readonly" />
+						</td>
+					</tr>
+					<tr>
+						<td>投诉原因</td>
+						<td>
+							<textarea name="cmain"  id="cmain"  readonly="readonly"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>投诉状态</td>
+						<td>
+							<input type="text" id="cstate"  readonly="readonly" />
+						</td>
+					</tr>
+					<tr id="aid1">
+						<td>处理人</td>
+						<td>
+							<input type="text"  id="aid"   readonly="readonly" />
+						</td>
+					</tr>
+					<tr id="cresult1">
+						<td>投诉结果</td>
+						<td>
+							<textarea   id="cresult" readonly="readonly" ></textarea>
+						</td>
+					</tr>
+					<tr id="cuint1">
+						<td>本次投诉处理措施</td>
+						<td>
+							<input type="text"  id="cuint"   readonly="readonly" />
+						</td>
+					</tr>
+					<tr id="cpint1">
+						<td>被投诉人处理措施</td>
+						<td>>
+							<input type="text"  id="cpint"   readonly="readonly" />
+						</td>
+					</tr>
+					<tr id="cfinsh1">
+						<td>处理日期</td>
+						<td>
+							<input type="text"  id="cfinsh"  readonly="readonly" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span id="tj">
+								<input type="submit" style="width: 100PX;" value="撤销投诉" />
+							</span>
+							
+						</td>
+						<td id="bfh">
+						<a href="javascript:history.go(-1);location.reload()">
+							<input type="button" value="返回" />
+						</a>
+					</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</body>
+	<script>
+		$(function(){
+			console.log("Usermessagemain页面加载++++");
+			var cids=getUrlParam("cid");
+			console.log(cids);
+			$("#cid").val(cids)
+
+			$.ajax({
+				url:"/userMessageMain",
+				dataType: "json",
+				async:true,
+				type:"post",
+				data: {
+					"cid":cids
+				},
+				success:function(data) {
+					/*
+                                * 由后端而来，需要进行el表达式，数据填充{
+                                    data{
+                                        cid,tid,cstart,pid,ctype,cmain,cstate,aid,cresult,
+                                        *
+                                        * cuint,cpint,cfinsh
+                                    }
+
+                                }*/
+
+					$("#tid").val(data.tid);
+					$("#pid").text(data.pid);
+					$("#cstart").val(data.cstart);
+					$("#ctype").val(data.ctype);
+
+					$("#cmain").val(data.cmain);
+
+					$("#aid").val(data.aid);
+					$("#cresult").val(data.cresult);
+
+					$("#cfinsh").val(data.cfinsh);
+					$("#cpint").val(data.cpint);
+
+					if(data.cuint==0){
+						$("#cuint").val("不处理");
+					}else if(data.cuint==+5){
+						$("#cuint").val("小小奖励");
+					}else if(data.cuint==+15){
+						$("#cuint").val("大大奖励");
+					}else if(data.cuint==-10){
+						$("#cuint").val("惩罚");
+					}else if(data.cuint==-100){
+						$("#cuint").val("终极处罚");
+					}
+					if(data.cpint==0){
+						$("#cpint").val("不处理");
+					}else if(data.cpin=t=-10){
+						$("#cpint").val("小小惩罚");
+					}else if(data.cpint==-30){
+						$("#cpint").val("中级惩罚");
+					}else if(data.cpint==-70){
+						$("#cpint").val("高级惩罚");
+					}else if(data.cpint==-100){
+						$("#cpint").val("终极处罚");
+					}
+
+
+
+					var cstate1=data.cstate;
+					if(cstate1==0){
+						$("#cstate").val("已处理");
+
+						$("#tj").hide();
+					}else if(cstate1==1){
+						$("#tj").hide();
+						$("#aid1").hide();
+						$("#cresult1").hide();
+						$("#cuint1").hide();
+						$("#cpint1").hide();
+						$("#cfinsh1").hide();
+						$("#cstate").val("处理中");
+
+					}else if(cstate1==2){
+						$("#cstate").val("已撤销");
+						$("#tj").hide();
+
+						$("#aid1").hide();
+						$("#cresult1").hide();
+						$("#cuint1").hide();
+						$("#cpint1").hide()
+					}
+				}
+			})
+		})
+	</script>
+</html>

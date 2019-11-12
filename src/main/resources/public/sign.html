@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="../js/jquery-1.11.0.min.js" ></script>
+		<link rel="stylesheet" href="static/schoolrun.css" />
+		<style>
+			span{
+				color: red;
+				font-size: 20px;
+			}
+		</style>
+	</head>
+	<!--
+		这里是注册页面，只可以注册用户（注意这都是在就在jsp下，使用el表达式）
+		表单提交：{
+			action="{pageContext.request.cotextPath}/sign"
+			data{
+				uid,uname,upwd,utype,uaddress，utel
+			}
+		}
+		返回的错误信息对字节码是中文
+	-->
+	<body>
+		<div>
+			<form action="{pageContext.request.cotextPath}/sign" method="post">
+				<table>
+					<table>
+					<tr>
+						<td>账号：</td>
+						<td>
+							<input type="text" name="uid" id="uid"  placeholder="请输入账号(提示:学号或工号)" />
+										
+						</td>					
+					</tr>
+					<tr>
+						<td></td>
+						<td><span id="span1" ></span></td>
+					</tr>
+					<tr>
+						<td>用户昵称：</td>
+						<td>
+							<input type="text"  name="uname" id="uname" placeholder="请输入昵称" />						
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><span id="span2" > </span></td>
+					</tr>
+					<tr>
+						<td>密码：</td>
+						<td>
+							<input type="password" name="upwd" id="upwd1" placeholder="请输入密码" />
+							
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><span id="span3"></span> </span></td>
+					</tr>
+					<tr>
+						<td>确认密码：</td>
+						<td>
+							<input type="password" id="upwd2"  placeholder="请确认密码" />
+						</td>
+						
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<span id="span4" ></span>
+						</td>
+					</tr>
+					<tr>
+						<td>角色：</td>
+						<td>
+							<input type="radio" name="utype" value="1" checked="checked" />用户
+							<input type="radio" name="utype" value="2"/>跑腿
+						</td>
+					</tr>
+					<tr>
+						<td>联系方式：</td>
+						<td>
+							<input type="password"  name="utel" id="utel" placeholder="请输入联系方式）" />							
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<span id="span6" ></span>
+						</td>
+					</tr>
+					<tr>
+						<td>地址：</td>
+						<td>
+							<input type="password"  name="uaddress" id="uaddress" placeholder="请输入所住地址（提示：寝室楼号）"
+								style="width: 300px;height: 50px;" />							
+						</td>
+						
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<span id="span5" ></span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="submit" value="提交" />
+						</td>
+						<td>
+							<a href="/">
+								<input type="button" id="button1" value="取消" />
+							</a>		
+					</tr>
+					
+				</table>
+				</table>
+			</form>		
+		</div>
+	</body>
+	<script>
+		//接收到错误信息，弹窗显示
+		var error="${error}";
+		var msg="${msg}";
+		if(error=="false"){
+			alert(msg);
+		}
+		//这是注册输入时的检查验证，有些乱，后面需要优化
+		//添加验证
+
+		$("#uaddress").hover(function(){
+			var  $uid=$("#uid").val().trim().replace(/\s/g,"");
+			
+			if($uid==null||$uid==""){				
+				$("#span1").text("哥们，你确定学号填了？");				
+			}
+			else if($uid.length!=10){				
+				$("#span1").text("哥们，你确定学号正确？");
+			}else{				
+				$("#span1").text("");
+			}						
+			var  $uid1=$("#uname").val().trim().replace(/\s/g,"");
+			if($uid1==null||$uid1==""){		
+				$("#span2").text("哥们，你昵称没有填？");
+			}
+			else {
+				$("#span2").text("");
+			}			
+			var  $upwd1=$("#upwd1").val().trim().replace(/\s/g,"");
+			var  $upwd2=$("#upwd2").val().trim().replace(/\s/g,"");
+			if($upwd1==null||$upwd1==""){		
+				$("#span3").text("哥们，你密码没有填");
+				$("#span4").text("");
+			}else if($upwd1!=$upwd2){		
+				$("#span4").text("哥们，你两次密码不一致啊");
+			}
+			else if($upwd1==$upwd2){
+				$("#span3").text("");
+				$("#span4").text("");
+				
+			}
+			
+			var $utel=$("#utel").val().trim().replace(/\s/g,"");
+			if($utel==null||$utel==""){				
+				$("#span6").text("哥们，你电话没填？");				
+			}
+			else if($utel.length!=11){				
+				$("#span6").text("哥们，你确定你的手机号不是11位？");
+			}else{
+				$("#span6").text("");
+			}
+		},function(){
+			var  $uadress=$("#uaddress").val().trim().replace(/\s/g,"");
+			if($uadress==null||$uadress==""){		
+				$("#span5").text("嘿！哥们，你地址没有填，难道要我用万里追踪吗？");
+			}
+			else {
+				$("#span5").text("");
+			}
+		})
+	</script>
+</html>

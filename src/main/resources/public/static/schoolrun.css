@@ -1,0 +1,78 @@
+	body{
+		background-color: #E2E2E2;
+	}
+	body div:first-child{
+			background-color: #FBFBFB;
+			margin-top: 20px;
+			margin-left: 10%;
+		
+			padding-left: 2%;
+			border-radius: 20px;		
+			width: 80%;
+			
+			font-size:15px;
+			font-family: "楷体";	
+			border: 2px solid slateblue;
+			text-align: justify ;
+			
+	}
+		tr td:first-child{
+			text-align: center;
+									
+		}
+		tr td{
+			
+			padding: 5px;
+					
+		}
+			
+		
+		input{
+			font-size:15px;
+			font-family: "楷体";	
+			height: 20px;
+			border-radius: 5px;	
+			
+		}
+		input[readonly="readonly"] {
+			border-style: hidden;
+			background-color: #FBFBFB;
+			color: #8D8D8D;
+		}
+		textarea[readonly="readonly"]{
+			
+			background-color: #FBFBFB;
+			color: #8D8D8D;
+		}
+		select{
+			font-size: 10px;
+			font-family: "楷体";	
+			width: 100px;
+			height: 20px;
+			border-radius: 5px;	
+			
+		}
+		
+		input[type="submit"] {
+			width: 50px;
+			margin-top: 20px;
+					
+		}
+		input[type="button"] {
+			width: 50px;
+			margin-top: 20px;
+			
+		}
+		td span{
+			color: red;
+			font-size:15px;
+		}
+		textarea{
+			width: 250px;
+			height: 60px;
+			resize: none;//取消文本域拖拽
+		}
+		table tr:last-child td:last-child {
+			
+			padding-left: 80px;
+		}

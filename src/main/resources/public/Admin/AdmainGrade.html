@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>信誉分管理</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+ <link rel="stylesheet" href="../static/layui/css/layui.css">
+  <script src="../static/layui/layui.js"></script>
+  <script src="../static/jquery-1.11.0.min.js"></script>>
+</head>
+<!--
+	这是管理员的信誉分管理，需要进行layui的数据填充
+		页面加载		{
+					url:"${pageContext.request.contextPath}/admaingrade"  
+					data{
+						uid,uname,urole,resover,uint
+						}
+					该页面加载时，需要在后端进行充能权限校验	
+				}
+		点击置零{
+			当点击该行的置零按钮时，选择确定，进行，ajax
+					{
+						url:"${pageContext.request.contextPath}/admainzero",
+						"uid":data.uid
+							在 后端进行信誉积分置零，
+							和
+							成功后需要将信誉积分uint返回，将置零完成0返回
+							并将置零时间填充上
+						}
+			}
+		点击充能，就是置零时间已过，对其进行信誉分恢复{
+			 当点击该行的充能按钮时，选择确定，进行，ajax{
+			 		url:"${pageContext.request.contextPath}/admainfull",
+			 		"uid":data.uid
+							在 后端进行信誉积分恢复，即将信誉分设为满值100，还有就是充能权限设置为为启用
+							和
+							成功后需要将信誉积分uint返回，将充能完成返回
+							
+			 		}
+			 附：可以对其充能权限进行验证，通过，则允许充能，否则不允许		
+		}	
+		
+		
+		
+-->
+<body>
+ 
+<table class="layui-hide" id="test" lay-filter="test"></table>
+ 
+
+ 
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-xs" lay-event="zero">置零</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="full">充能</a>
+</script>                    
+<script>
+	/*
+	 
+	 * */
+layui.use('table', function(){
+  var table = layui.table;
+  
+  table.render({
+	    elem: '#test'
+	    ,url:"/admin/list"
+	    ,cols: [[
+	      ,{field:'uid', title:'用户ID', width:120}
+	      ,{field:'uname', title:'用户昵称', width:80}
+	      ,{field:'urole', title:'用户角色', width:100}
+	      ,{field:'resover', title:'充能恢复权限', width:100}
+	      ,{field:'uint', title:'信誉积分', width:120, sort: true}
+	      ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+	    ]]
+	    ,page: true
+ 	 });
+  
+  //头工具栏事件
+  table.on('toolbar(test)', function(obj){
+   
+   });
+  
+  //监听行工具事件
+  table.on('tool(test)', function(obj){
+	    var data = obj.data;
+	    var tr=obj.tr;
+	    //console.log(obj)
+	    if(obj.event === 'zero'){
+	      layer.confirm('真的置零吗', function(index){
+	      	layer.close(index);//关闭弹框，问题：index
+	    	$.ajax({
+	    		type:"post",
+	    		url:"${pageContext.request.contextPath}/admainzero",
+	    		async:true,
+	    		data:{
+	    			"uid":data.uid
+	    		},
+	    		dataType:"json",
+	    		success:function(data){
+	    			obj.updata({ //同步更新表格和缓存对应的值
+	    				uint:data.uint
+	    				})
+	    			layer.msg("置零成功", {icon: 6});
+	    			}
+			 });
+		  });
+	    } else if(obj.event === 'full'){
+	      layer.confirm('真的充能吗', function(index){
+	      	layer.close(index);//关闭弹框，问题：index
+	    	$.ajax({
+	    		type:"post",
+	    		url:"${pageContext.request.contextPath}/admainfull",
+	    		async:true,
+	    		data:{
+	    			"uid":data.uid
+	    		},
+	    		dataType:"json",
+	    		success:function(data){
+	    			//需要对返回值进行
+	    			obj.updata({ //同步更新表格和缓存对应的值
+	    				uint:data.uint
+	    			})
+	    			layer.msg("充能成功", {icon: 6});
+
+	    		  }
+	        });
+	    });  
+	  };
+   });	
+});
+
+
+</script>
+
+</body>
+</html>

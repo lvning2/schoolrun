@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<title>我的订单主体</title>
+	 	<link rel="stylesheet" href="../static/schoolrun.css" media="all">
+  		<script type="text/javascript" src="../static/jquery-1.11.0.min.js"></script>
+		<script type="text/javascript" src="../static/resove.js"></script>
+ 
+	</head>
+	<!--
+		这是我的订单主体，从后端返回时，需要进行数据填充,使用了el表达式{
+			data:{
+					tid,tstart,uid,utel,trecom，tmain，tdemand，tadress，teva，tcompalin，tstate，tend,tgift
+				}
+			点击提交后，吧tid提交，并把任务状态改变
+			
+			与  ErrandTasknewest.html 页面基本一样  ，但考虑到增加弹窗优化时，所以增加
+		}
+	-->
+	<body>
+		<div>
+			
+		
+		<form action="{pageContext.request.contextPath}/errandtaskchange">
+			<table>
+				<!-- 任务编号 -->
+				<tr>
+					<td>任务编号：</td>
+					<td>
+						<input  type="text" name="tid"  value="${tid}" id="tid"  readonly="readonly"/>  					
+					</td>
+				</tr>
+				<!--任务发起时间-->
+				<tr>
+					<td>任务发起时间：</td>
+					<td>
+						<input  type="text" id="tstart"  value="${tstart}" readonly="readonly" />  
+					</td>
+				</tr>
+				<!-- 发起人 -->
+				<tr>
+					<td>发起人：</td>
+					<td><input  type="text" id="uid"  value="${uid}"  readonly="readonly"/>  </td>
+				</tr>
+				<!-- 发起人联系方式-->
+				<tr>
+					<td>发起人联系方式：</td>
+					<td><input  type="text" id="utel"  value="${utel}" readonly="readonly"/>  </td>
+				</tr>		
+				<tr>
+					<td>任务简介：</td>
+					<td>  
+						<input  type="text" id="trecom"  value="${trecom}"   readonly="readonly" />
+					</td>
+				</tr>
+				<tr>
+					<td>任务酬劳：</td>
+					<td>
+						<input type="text" id="tgift"  value="${tgift}" readonly="readonly"  style="width: 250px;"/>
+					</td>
+				</tr>
+				<!-- 任务详情 -->
+				<tr>
+					<td>任务详情：</td>
+					<td> 
+						<textarea id="tmain" id="tmain"  value="${tmain}" readonly="readonly"></textarea>
+					</td>
+				</tr>
+				<!-- 完成要求 -->
+				<tr>
+					<td>完成要求：</td>
+					<td>
+						<textarea id="tdemand"  id="tdemand" value="${tdemand}" readonly="readonly"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td>任务地点：</td>
+					<td><input  type="text" id="tadress"   value="${tadress}" readonly="readonly"/>  </td>
+				</tr>
+				<!--评价-->
+				<tr id="teva1">
+					<td>评价：</td>
+					<td><input  type="text" id="teva"  value="${teva}"  readonly="readonly"/>  </td>
+				</tr>
+				<!--异常状态-->
+				<tr >
+					<td>异常状态：</td>
+					<td><input  type="text" id="tcompalin"  value="${tcompalin}"  readonly="readonly"/>  </td>
+				</tr>
+				<!--任务状态-->
+				<tr >
+					<td>任务状态：</td>
+					<td><input  type="text" id="tstate"  value="${tstate}"  readonly="readonly"/>  </td>
+				</tr>
+				<!--完结时间-->
+				<tr id="tend1">
+					<td>完结时间：</td>
+					<td><input  type="text" id="tend"  value="${tend}"  readonly="readonly"/>  </td>
+				</tr>
+			
+				<!-- 按钮 -->
+				<tr>
+					<td>	
+						<span id="tj">
+							<input type="submit" value="完成" />		
+						</span>	
+					</td>
+					<td id="bfh">
+						<a href="javascript:history.go(-1);location.reload()">
+							<input type="button" value="取消" />
+						</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+</body>
+<script>
+	$(function(){
+		var tids=getUrlParam("tid");
+		$.ajax({
+			url:"/usertaskmain"
+			,type:"post"
+			,datatype:"json"
+			,data:{
+				"tid":tids
+			}
+			,success:function (data) {
+				$("#tid").val(data.tid);
+				$("#uid").val(data.uid);
+				$("#utel").val(data.utel);
+				$("#tstart").val(data.tstart);
+				$("#trecom").val(data.trecom);
+				$("#tmain").val(data.tmain);
+				$("#tdemand").val(data.tdemand);
+				$("#tadress").val(data.tadress);
+
+
+
+				$("#tend").val(data.tend);
+				$("#tgift").val(data.tgift);
+
+				//对评价进行转换
+				if(data.teva==1){$("#teva").val("恶劣");}
+				else if(data.teva==2){$("#teva").val("差");}
+				else if(data.teva==3){$("#teva").val("一般");}
+				else if(data.teva==4){$("#teva").val("好");}
+				else if(data.teva==4){$("#teva").val("良好");}
+				else if(data.teva==4){$("#teva").val("完美");}
+
+				//进行异常状态转换
+
+				if(data.tcompalin==0){$("#tcompalin").val("无");}
+				else if(data.tcompalin==1){$("#tcompalin").val("投诉中");}
+				else if(data.tcompalin==2){$("#tcompalin").val("投诉结束");}
+				//进行任务状态准换
+
+				if(data.tstate==0){$("#tstate").val("未受理");}
+				else if(data.tstate==1){$("#tstate").val("已取消");}
+				else if(data.tstate==2){$("#tstate").val("任务进行中");}
+				else if(data.tstate==3){$("#tstate").val("任务交付");}
+				else if(data.tstate==4){$("#tstate").val("任务完成");}
+				else if(data.tstate==5){$("#tstate").val("任务结束");}
+
+				if(data.tstate==2){
+					$("#teva1").hide();
+					$("#tend1").hide();
+				}else{
+					$("tj").hide();
+				}
+			}
+		})
+
+
+	})
+</script>
+	
+</html>

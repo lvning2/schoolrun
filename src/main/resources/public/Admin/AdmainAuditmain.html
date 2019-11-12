@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>审核管理主体</title>	
+	  <script src="../static/jquery-1.11.0.min.js"></script>
+	  <script src="../static/resove.js"></script>
+	  <link  rel="stylesheet"  href="../static/schoolrun.css"/>
+	</head>
+	<!--
+		这是审核管理的主体界面，由审核列表通过后端传递而来
+			需要进行数据填充，是springmvc的自动绑定，使用了el表达式
+				data{.
+					uid,uname,uaddress,utel,urole,ustart
+				}
+			选择下拉框审核结果，中的值，默认为审核中
+				   单击提交时，	将表单提交，{
+				   	action="${pageContext.request.contextPath}/admiamauditchange
+				   	data{
+				   		uid,urole
+				   	}
+				  当选择通过时，需要将该用户信誉积分uint改为100，
+				  		账户状态ustate设置为通过
+				  		充能权限设置为未启用
+			}
+	-->
+	<body>
+		<div>
+			<form  action="/admiamauditchange">
+			<table>
+				<tr>
+					<td>学号：</td>
+					<td>
+						<input type="text" name="uid" id="uid"  readonly="readonly" />
+					</td>
+				</tr>
+				<tr>
+					<td>昵称：</td>
+					<td>
+						<input type="text" id="uname" readonly="readonly" />
+					</td>
+				</tr>
+				<tr>
+					<td>地址：</td>
+					<td>
+						<input type="text"  id="uadress" readonly="readonly" />
+					</td>
+				</tr>
+				<tr>
+					<td>联系方式：</td>
+					<td>
+						<input type="text"  id="utel" readonly="readonly" />
+					</td>
+				</tr>
+				<tr>
+					<td>角色：</td>
+					<td>
+						<input type="text"  id="urole" readonly="readonly" />
+					</td>
+				</tr>
+				<tr>
+					<td>注册时间：</td>
+					<td>
+						<input type="text"  id="ustart" readonly="readonly" />
+					</td>
+				</tr>
+				<tr>
+					<td>审核结果：</td>
+					<td>
+						<select name="urole" >
+							<option value="0" selected="selected">审核中</option>//默认值
+							<option value="1">通过</option>
+							<option value="2">不通过</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="submit" value="提交" />
+					</td>
+					<td id="bfh">
+						<a href="javascript:history.go(-1);location.reload()">
+							<input type="button" value="返回" />
+						</a>
+					</td
+				</tr>
+			</table>
+		</form>
+		</div>	
+	</body>
+<script>
+	$(function () {
+		var uids=getUrlParam("uid");
+		console.log("####:"+uids);
+		$.ajax({
+			url:"/admin/userInfo",
+			data:{
+				"uid":uids
+			},
+			dataType:"json",
+			type:"post",
+			success:function (data) {
+				$("#uid").val(data.uid);
+				$("#uname").val(data.uname);
+				$("#uadress").val(data.uaddress);
+				$("#utel").val(data.utel);
+
+				$("#ustart").val(data.ustart);
+
+				if(data.urole==0){
+					$("#urole").val("客户");
+				}else if(data.urole==1){
+					$("#urole").val("跑腿");
+				}
+
+			}
+		})
+
+	})
+
+
+
+</script>
+</html>

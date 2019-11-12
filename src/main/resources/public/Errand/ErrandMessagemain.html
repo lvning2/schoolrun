@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>投诉信息内容</title>
+		<link rel="stylesheet" href="../static/schoolrun.css" media="all">
+  		<script type="text/javascript" src="../static/jquery-1.11.0.min.js"></script>
+		<script src="../static/resove.js"></script>
+		
+	</head>
+	<!--
+		这是跑腿用户投诉信息列表主体，页面加载时，需要进行数据填充，不需要提交表单，只是查看功能
+			需要对投诉状态进行判定，进行html页面结构的改变{
+				data{
+					cid，tid，cstart，uid，ctype，cmain，cstate，aid，cfinsh，cfinsh，cfinsh
+				}
+			}
+		
+	-->
+	<body>
+		<div>
+			<form>
+				<table>
+					<tr>
+						<td>投诉编号</td>
+						<td>
+							<input type="text"  id="cid" readonly="readonly" />
+						</td>
+					</tr>
+					<tr>
+						<td>投诉任务编号</td>
+						<td>
+							<input type="text"  id="tid" readonly="readonly" />
+						</td>
+					</tr>
+					<tr>
+						<td>投诉日期</td>
+						<td>
+							<input type="text"  id="cstart" readonly="readonly" />
+						</td>
+					</tr>
+					<tr>
+						<td>投诉人：</td>
+						<td>
+							<input type="text"  id="uid" readonly="readonly" />
+						</td>
+					</tr>
+					<tr>
+						<td>投诉类别</td>
+						<td>
+							<input type="text"  id="ctype" readonly="readonly" />
+						</td>
+					</tr>
+					<tr>
+						<td>投诉原因</td>
+						<td>
+							<textarea name="cmain" id="cmain" ></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>投诉状态</td>
+						<td>
+							<input type="text"  id="cstate" readonly="readonly" />
+						</td>
+					</tr>
+					<tr id="aid1">
+						<td>处理人</td>
+						<td>
+							<input type="text"  id="aid" readonly="readonly" />
+						</td>
+					</tr>
+					<tr id="cresult1">
+						<td>投诉结果</td>
+						<td>
+							<input type="text"  id="cresult" readonly="readonly" />
+						</td>
+					</tr>
+					<tr id="cpint1">
+						<td>被投诉处理措施</td>
+						<td>
+							<input type="text"  id="cpint" readonly="readonly" />
+							
+						</td>
+					</tr>					
+					<tr id="cfinsh1">
+						<td>处理日期</td>
+						<td>
+							<input type="text"  id="cfinsh" readonly="readonly" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+						     
+						</td>
+						<td id="bfh">
+						<a href="javascript:history.go(-1);location.reload()">
+							<input type="button" value="返回" />
+						</a>
+					</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</body>
+	<script>
+
+			$(function() {
+				console.log("页面加载++++");
+				var cids = getUrlParam("cid");
+				console.log(cids);
+				$("#cid").val(cids);
+
+				$.ajax({
+					url: "/userMessageMain",
+					dataType: "json",
+					async: true,
+					type: "post",
+					data: {
+						"cid": cids
+					},
+					success: function (data) {
+						/*
+                                    * 由后端而来，需要进行el表达式，数据填充{
+                                        data{
+                                            cid,tid,cstart,pid,ctype,cmain,cstate,aid,cresult,
+                                            *
+                                            * cuint,cpint,cfinsh
+                                        }
+
+                                    }*/
+
+						$("#tid").val(data.tid);
+						$("#pid").text(data.pid);
+						$("#cstart").val(data.cstart);
+						$("#ctype").val(data.ctype);
+
+						$("#cmain").val(data.cmain);
+
+						$("#aid").val(data.aid);
+						$("#cresult").val(data.cresult);
+
+						$("#cfinsh").val(data.cfinsh);
+						$("#cpint").val(data.cpint);
+						var cstate = data.cstart;
+						if (cstate == 2) {
+							$("#aid1").hide();
+							$("#cresult1").hide();
+							$("#cpint1").hide();
+							$("#cfinsh1").hide();
+						}
+					}
+				})
+			})
+	</script>
+</html>
